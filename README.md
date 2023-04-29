@@ -1,13 +1,13 @@
 
 # The Program's 5 States specification:-
 
-1. Idle state (Starting state): awaiting user action
+## 1. Idle state (Starting state): awaiting user action
  * 		- Active motion detection (No motion detected)
  * 		- Administration approved
  * 		- Buzzer alarm OFF
  * 		- Door locked
  * 		- LCD no display (or OFF if we can)
-2. Input state: receive input from Keypad or from RFID reader
+## 2. Input state: receive input from Keypad or from RFID reader
  * 		- Active motion detection (No motion detected)
  * 		- Administration authorised usage
  * 		- Receiving RFID input
@@ -15,21 +15,21 @@
  * 		- Door locked
  * 		- LCD prompts for user input
  * 		- Check for correct pass input or prompt for 2 more retrials
-3. Alert state: the PIR signaled a motion detection
+## 3. Alert state: the PIR signaled a motion detection
  * 		- Active motion detection (motion detected)
  * 		- Administration unauthorised usage
  * 		- Receiving RFID input
  * 		- Buzzer alarm ON
  *		- Door locked
  * 		- LCD displays an Intruder warning message
-4. Unlock state: the door is unlocked
+## 4. Unlock state: the door is unlocked
  * 		- Disabled motion detection
  * 		- Administration unauthorised usage
  * 		- Ignore RFID input
  * 		- Buzzer alarm OFF
  * 		- Door Unlocked
  * 		- LCD displays an Unlocked user message
-5. Admin state:
+## 5. Admin state:
  * 		- Disabled motion detection
  * 		- Administration authorised usage
  * 		- Ignore RFID input
