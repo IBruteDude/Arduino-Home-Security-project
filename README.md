@@ -39,9 +39,9 @@
 
 # The Program's State transitions:-
 
- Idle state --['#' (Start) button is pressed]--> Input state
- Input state --[correct password input]--> Unlock state
- Unlock state --['*' (Exit) button is pressed]--> Idle state
+ - Idle state --['#' (Start) button is pressed]--> Input state
+ - Input state --[correct password input]--> Unlock state
+ - Unlock state --['*' (Exit) button is pressed]--> Idle state
 
  Input state --[incorrect password for 3 times (or motion detected)]--> Alert state
  Alert state --[valid admin RFID scanned]--> Admin state
