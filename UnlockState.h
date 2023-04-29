@@ -1,4 +1,4 @@
 #include "StateFunctions.h"
 
-bool UnlockState()
+int From_UnlockState()
 {}

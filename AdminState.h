@@ -1,4 +1,6 @@
 #include "StateFunctions.h"
 
-bool AdminState()
-{}
+int From_AdminState()
+{
+	noTone(buzzerPin);
+}
