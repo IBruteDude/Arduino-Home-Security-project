@@ -4,41 +4,71 @@
 #include <Keypad.h>
 #include <LiquidCrystal.h>
 #include <SPI.h>
+#include <deprecated.h>
+#include <MFRC522.h>
+#include <MFRC522Extended.h>
+#include <require_cpp11.h>
 
+#define PIR_Pin			12
+#define BUZZER_Pin		13
+#define LOCK_Pin		48
 
-#define pirPin 12
-#define buzzerPin 13
-#define FREQ 400
-#define alarmDuration 1000
+#define RST_Pin			49
+#define SDA_SS_Pin		53
+
+#define CARD_UID		"EB 4A 92 22"
+#define TAG_UID 		"2A 1B 6F 81"
+
+#define FREQ			400
+#define alarmDuration	1000
+
+enum StatesTransition
+{
+	TO_IDLE_STATE,
+	TO_INPUT_STATE,
+	TO_UNLOCK_STATE,
+	TO_ALERT_STATE,
+	TO_ADMIN_STATE
+};
+
 #define ROWS 4
 #define COLS 4
 
-#define TO_IDLE_STATE 0
-#define TO_INPUT_STATE 1
-#define TO_UNLOCK_STATE 2
-#define TO_ALERT_STATE 3
-#define TO_ADMIN_STATE 4
-
-
 inline char keys[ROWS][COLS] = {
-  {'1', '2', '3', 'A'},
-  {'4', '5', '6', 'B'},
-  {'7', '8', '9', 'C'},
-  {'*', '0', '#', 'D'}
+	{'1', '2', '3', 'A'},
+	{'4', '5', '6', 'B'},
+	{'7', '8', '9', 'C'},
+	{'*', '0', '#', 'D'}
 };
+
 inline byte rowPins[ROWS] = {4, 5, 6, 7};
 byte colPins[COLS] = {8, 9, 10, 11};
   
 inline Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 inline LiquidCrystal lcd(2, 3, 14, 15, 16, 17);
+inline MFRC522 RFID(SDA_SS_Pin, RST_Pin);  // Create MFRC522 instance
 
-int From_IdleState();
-int From_InputState();
-int From_UnlockState();
-int From_AlertState();
-int From_AdminState();
+inline int From_IdleState();
+inline int From_InputState();
+inline int From_UnlockState();
+inline int From_AlertState();
+inline int From_AdminState();
 
-inline bool motion_detected, lockState, inputState, lcdState;
+inline void unlockSolenoid() {
+	if (lockState) {
+		digitalWrite(LOCK_Pin, LOW);
+		lockState = false;
+	}
+}
+
+inline void lockSolenoid() {
+	if (!lockState) {
+		digitalWrite(LOCK_Pin, HIGH);
+		lockState = true;
+	}
+}
+
+inline bool motion_detected = false, lockState = true;
 inline char pressedKey = NO_KEY;
 inline String CORRECT_PASS = "1234";
 #endif
