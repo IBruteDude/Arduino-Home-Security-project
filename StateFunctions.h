@@ -4,10 +4,7 @@
 #include <Keypad.h>
 #include <LiquidCrystal.h>
 #include <SPI.h>
-#include <deprecated.h>
-#include <MFRC522.h>
 #include <MFRC522Extended.h>
-#include <require_cpp11.h>
 
 #define PIR_Pin			12
 #define BUZZER_Pin		13
@@ -16,8 +13,8 @@
 #define RST_Pin			49
 #define SDA_SS_Pin		53
 
-#define CARD_UID		"EB 4A 92 22"
-#define TAG_UID 		"2A 1B 6F 81"
+#define CARD_UID		"EB4A9222"
+#define TAG_UID 		"2A1B6F81"
 
 #define FREQ			400
 #define alarmDuration	1000
@@ -30,7 +27,7 @@ enum StatesTransition
 	TO_ALERT_STATE,
 	TO_ADMIN_STATE
 };
-
+int i = 0x10;
 #define ROWS 4
 #define COLS 4
 
@@ -47,6 +44,10 @@ byte colPins[COLS] = {8, 9, 10, 11};
 inline Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 inline LiquidCrystal lcd(2, 3, 14, 15, 16, 17);
 inline MFRC522 RFID(SDA_SS_Pin, RST_Pin);  // Create MFRC522 instance
+
+inline bool motion_detected = false, lockState = true;
+inline char key = NO_KEY;
+inline String CORRECT_PASS = "1234";
 
 inline int From_IdleState();
 inline int From_InputState();
@@ -68,7 +69,23 @@ inline void lockSolenoid() {
 	}
 }
 
-inline bool motion_detected = false, lockState = true;
-inline char pressedKey = NO_KEY;
-inline String CORRECT_PASS = "1234";
+inline bool validRFID() {
+	// Look for new cards
+	if (RFID.PICC_IsNewCardPresent() && RFID.PICC_ReadCardSerial()) {
+		// Read the card ID
+		String ReadID = "";
+
+		for (byte i = 0; i < RFID.uid.size; i++) {
+			ReadID += RFID.uid.uidByte[i] < 0x10 ? "0" : "";
+			ReadID += String(RFID.uid.uidByte[i], 16);
+		}
+		RFID.PICC_HaltA();
+		RFID.PCD_StopCrypto1();
+		
+		// Compare the card ID with the target ID
+		if (ReadID == CARD_UID || ReadID == TAG_UID)
+			return (true);
+	}
+	return (false);
+}
 #endif

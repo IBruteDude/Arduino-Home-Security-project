@@ -2,7 +2,7 @@
 
 int From_AlertState()
 {
-	tone(buzzerPin, FREQ);
+	tone(BUZZER_Pin, FREQ);
 	lcd.clear();
 	lcd.print("Access Denied");
 	if (motion_detected == true) {
@@ -10,5 +10,8 @@ int From_AlertState()
 		lcd.print("INTRUDER");
 	}
 
-	// Check for RFID reader, and when true return TO_ADMIN
+	// Wait until valid UID is detected, and when true return to Admin State
+	while (!validRFID());
+
+	return TO_ADMIN_STATE;
 }

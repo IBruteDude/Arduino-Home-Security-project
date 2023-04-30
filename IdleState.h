@@ -3,7 +3,7 @@
 int From_IdleState() {
 	lcd.noDisplay();
 	while (keypad.getKey() != '#') {
-		if (digitalRead(pirPin) == HIGH) {
+		if (digitalRead(PIR_Pin) == HIGH) {
 			return TO_ALERT_STATE;
 		}
 	}

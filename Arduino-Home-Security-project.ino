@@ -6,37 +6,46 @@
 #include "AlertState.h"
 #include "AdminState.h"
 
+
 int Next_Program_State;
 
 void setup()
 {
-	lcd.begin(16, 2);
-	lcd.print("Bismillah");
-	pinMode(pirPin, INPUT_PULLUP);
-	pinMode(buzzerPin, OUTPUT);
-	// TODO: RFID tag and solenoid lock Setup
+	// Initialise arduino pin modes
+	pinMode(PIR_Pin, INPUT);
+	pinMode(BUZZER_Pin, OUTPUT);
+	pinMode(LOCK_Pin, OUTPUT);
 
+	lcd.begin(16, 2);		// Initialise LCD rows & columns
+	lcd.print("Bismillah"); // بنسمي الله
+	SPI.begin();			// Initialise SPI bus
+	RFID.PCD_Init();		// Initialise MFRC522
 
-	Next_Program_State = 0;
+	// Initialise the Programs state
+	Next_Program_State = TO_ADMIN_STATE;
+	motion_detected = false;
+	lockSolenoid();
 }
 void loop()
 {
-	switch(Next_Program_State)
-	{
-	case TO_IDLE_STATE:
-		Next_Program_State = From_IdleState();
-		break;
-	case TO_INPUT_STATE:
-		Next_Program_State = From_InputState();
-		break;
-	case TO_UNLOCK_STATE:
-		Next_Program_State = From_UnlockState();
-		break;
-	case TO_ALERT_STATE:
-		Next_Program_State = From_AlertState();
-		break;
-	case TO_ADMIN_STATE:
-		Next_Program_State = From_AdminState();
-		break;
-	}
+  if ((validRFID()))
+    lcd.print("Nice");
+	// switch(Next_Program_State)
+	// {
+	// case TO_IDLE_STATE:
+	// 	Next_Program_State = From_IdleState();
+	// 	break;
+	// case TO_INPUT_STATE:
+	// 	Next_Program_State = From_InputState();
+	// 	break;
+	// case TO_UNLOCK_STATE:
+	// 	Next_Program_State = From_UnlockState();
+	// 	break;
+	// case TO_ALERT_STATE:
+	// 	Next_Program_State = From_AlertState();
+	// 	break;
+	// case TO_ADMIN_STATE:
+	// 	Next_Program_State = From_AdminState();
+	// 	break;
+	// }
 }
