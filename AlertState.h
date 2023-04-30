@@ -43,6 +43,6 @@ int From_AlertState()
 		lcd.setCursor(0, 1);
 		lcd.print("INTRUDER");
 	}
-
+return TO_UNLOCK_STATE ;
 	// Check for RFID reader, and when true return TO_ADMIN
 }
