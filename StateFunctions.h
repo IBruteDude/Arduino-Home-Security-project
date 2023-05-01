@@ -94,8 +94,6 @@ inline bool validRFID() {
 
 
 
-
-
 	// // Look for new cards
 	// if (RFID.PICC_IsNewCardPresent() && RFID.PICC_ReadCardSerial()) {
 	// 	// Read the card ID
