@@ -1,9 +1,13 @@
 #include "StateFunctions.h"
 
-int AlertSTATE(){  // Check if the entered password is correct, then unlock the door
+int AlertSTATE(){  // Check if the entered password is correct, then unlock the door 
+while (true){
 
 	if (password == CORRECT_PASS) {  // unlock the solenoid lock
-      unlockDoor();  				
+      unlockDoor();  
+      }
+      else
+      {
 
       lcd.setCursor(0, 1);
       lcd.print("Door unlocked!");
@@ -42,6 +46,7 @@ int From_AlertState()
 	if (motion_detected == true) {
 		lcd.setCursor(0, 1);
 		lcd.print("INTRUDER");
+		
 	}
 return TO_UNLOCK_STATE ;
 	// Check for RFID reader, and when true return TO_ADMIN
