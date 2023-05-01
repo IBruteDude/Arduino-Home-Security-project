@@ -4,16 +4,16 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <MFRC522.h>
-#include <LiquidCrystal_I2C.h>
+#include <LiquidCrystal.h>
  
-#define SS_PIN 10
-#define RST_PIN 9
+#define SS_PIN 53
+#define RST_PIN 49
 #define LED_G 4 //define green LED pin
 #define LED_R 5 //define red LED
 #define BUZZER 13 //buzzer pin
 #define lock 48
 
-LiquidCrystal_I2C lcd(0x3F, 16, 2);
+LiquidCrystal lcd(2, 3, 14, 15, 16, 17);
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 int Btn = 6;
  
@@ -29,8 +29,7 @@ void setup() {
 	pinMode(lock,OUTPUT);
 	Serial.println("Place your card on reader...");
 	Serial.println();
-	lcd.begin();
-	lcd.backlight();
+	lcd.begin(16,2);
 	lcd.clear();
 	lcd.setCursor(0,0); // column, row
 	lcd.print(" Scan Your RFID "); 
@@ -38,32 +37,32 @@ void setup() {
 	lcd.print("   Door Locked   ");
 }
 void loop() {
-	if(digitalRead(Btn) == HIGH) {
-		Serial.println("Access Granted");
-		Serial.println();
-		delay(500);
-		digitalWrite(LED_G, HIGH);
-		lcd.setCursor(0,1); // column, row
-		lcd.print(" Door Un-Locked ");
-		tone(BUZZER, 2000);
-		delay(100);
-		noTone(BUZZER);
-		delay(50);
-		tone(BUZZER, 2000);
-		delay(100);
-		noTone(BUZZER);
-		digitalWrite(lock,HIGH);
-		delay(3000);
-		digitalWrite(lock,LOW);
-		delay(100);
-		digitalWrite(LED_G, LOW);
-		lcd.setCursor(0,1); // column, row
-		lcd.print("   Door Locked   ");
-		tone(BUZZER, 2000);
-		delay(100);
-		noTone(BUZZER);
-		delay(50);
-	}
+	// if(digitalRead(Btn) == HIGH) {
+	// 	Serial.println("Access Granted");
+	// 	Serial.println();
+	// 	delay(500);
+	// 	digitalWrite(LED_G, HIGH);
+	// 	lcd.setCursor(0,1); // column, row
+	// 	lcd.print(" Door Un-Locked ");
+	// 	tone(BUZZER, 2000);
+	// 	delay(100);
+	// 	noTone(BUZZER);
+	// 	delay(50);
+	// 	tone(BUZZER, 2000);
+	// 	delay(100);
+	// 	noTone(BUZZER);
+	// 	digitalWrite(lock,HIGH);
+	// 	delay(3000);
+	// 	digitalWrite(lock,LOW);
+	// 	delay(100);
+	// 	digitalWrite(LED_G, LOW);
+	// 	lcd.setCursor(0,1); // column, row
+	// 	lcd.print("   Door Locked   ");
+	// 	tone(BUZZER, 2000);
+	// 	delay(100);
+	// 	noTone(BUZZER);
+	// 	delay(50);
+	// }
 
 	// Look for new cards
 	if (!mfrc522.PICC_IsNewCardPresent()) 
@@ -87,24 +86,24 @@ void loop() {
 	Serial.print("Message : ");
 	content.toUpperCase();
 
-	if (content.substring(1) == "83 23 38 BB") { //change here the UID of card/cards or tag/tags that you want to give access
+	if (content.substring(1) == "EB 4A 92 22") { //change here the UID of card/cards or tag/tags that you want to give access
 		Serial.println("Access Granted");
 		Serial.println();
 		delay(500);
-		digitalWrite(LED_G, HIGH);
+		// digitalWrite(LED_G, HIGH);
 		lcd.setCursor(0,1); // column, row
 		lcd.print(" Door Un-Locked ");
-		tone(BUZZER, 2000, 100);
+		// tone(BUZZER, 2000, 100);
 		delay(50);
-		tone(BUZZER, 2000, 100);
+		// tone(BUZZER, 2000, 100);
 		digitalWrite(lock,HIGH);
 		delay(3000);
 		digitalWrite(lock,LOW);
 		delay(100);
-		digitalWrite(LED_G, LOW);
+		// digitalWrite(LED_G, LOW);
 		lcd.setCursor(0,1); // column, row
 		lcd.print("   Door Locked   ");
-		tone(BUZZER, 2000, 100);
+		// tone(BUZZER, 2000, 100);
 		delay(50);
 	} else {
 		lcd.setCursor(0,1); // column, row
@@ -112,9 +111,9 @@ void loop() {
 		Serial.println(" Access denied");
 		for (int i = 0; i < 3; i++)
 		{
-			digitalWrite(LED_R, HIGH);
-			tone(BUZZER, 1500, 500);
-			digitalWrite(LED_R, LOW);
+			// digitalWrite(LED_R, HIGH);
+			// tone(BUZZER, 1500, 500);
+			// digitalWrite(LED_R, LOW);
 			delay(100);
 		}
 		lcd.setCursor(0,1); // column, row

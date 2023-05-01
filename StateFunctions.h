@@ -10,11 +10,11 @@
 #define BUZZER_Pin		13
 #define LOCK_Pin		48
 
-#define RST_Pin			49
 #define SDA_SS_Pin		53
+#define RST_Pin			49
 
-#define CARD_UID		"EB4A9222"
-#define TAG_UID 		"2A1B6F81"
+#define CARD_UID		"EB 4A 92 22"
+#define TAG_UID 		"2A 1B 6F 81"
 
 #define FREQ			400
 #define alarmDuration	1000
