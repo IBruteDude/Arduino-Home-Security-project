@@ -22,30 +22,33 @@ void setup()
 	RFID.PCD_Init();		// Initialise MFRC522
 
 	// Initialise the Programs state
-	Next_Program_State = TO_ADMIN_STATE;
+	Next_Program_State = TO_INPUT_STATE;
 	motion_detected = false;
+	noTone(BUZZER_Pin);
 	lockSolenoid();
 }
 void loop()
 {
-  if ((validRFID()))
-    lcd.print("Nice");
-	// switch(Next_Program_State)
-	// {
-	// case TO_IDLE_STATE:
-	// 	Next_Program_State = From_IdleState();
-	// 	break;
-	// case TO_INPUT_STATE:
-	// 	Next_Program_State = From_InputState();
-	// 	break;
-	// case TO_UNLOCK_STATE:
-	// 	Next_Program_State = From_UnlockState();
-	// 	break;
-	// case TO_ALERT_STATE:
-	// 	Next_Program_State = From_AlertState();
-	// 	break;
-	// case TO_ADMIN_STATE:
-	// 	Next_Program_State = From_AdminState();
-	// 	break;
-	// }
+//   digitalWrite(LOCK_Pin, HIGH);
+// delay(1000)  ;
+//   digitalWrite(LOCK_Pin, LOW);
+// delay(1000)  ;	// switch(Next_Program_State)
+	switch (Next_Program_State)
+  {
+	case TO_IDLE_STATE:
+		Next_Program_State = From_IdleState();
+		break;
+	case TO_INPUT_STATE:
+		Next_Program_State = From_InputState();
+		break;
+	case TO_UNLOCK_STATE:
+		Next_Program_State = From_UnlockState();
+		break;
+	case TO_ALERT_STATE:
+		Next_Program_State = From_AlertState();
+		break;
+	case TO_ADMIN_STATE:
+		Next_Program_State = From_AdminState();
+		break;
+	}
 }

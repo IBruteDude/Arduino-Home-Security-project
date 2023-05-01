@@ -11,7 +11,10 @@ int From_AlertState()
 	}
 
 	// Wait until valid UID is detected, and when true return to Admin State
-	while (!validRFID() || keypad.getKey() != 'A');
+	while (key != 'A') {
+    validRFID_Read = validRFID();
+    key = keypad.getKey();
+  }
 
 	return TO_ADMIN_STATE;
 }

@@ -16,17 +16,21 @@ int From_InputState()
 	lcd.print("Enter Password:");
 	while (true)
 	{
+    lcd.clear();
+	  lcd.print("Enter Password:");
 		// The main waiting loop
-		while (key == NO_KEY) {
+		key = NO_KEY;
+    while (key == NO_KEY) {
 			key = keypad.getKey();
+      validRFID_Read = validRFID();
 			if (millis() - startingTime > idleDuration)
 				return TO_IDLE_STATE;
-			if (digitalRead(PIR_Pin) == HIGH) {
-				return TO_ALERT_STATE;
-			}
-			if (validRFID()) {
-				return TO_ADMIN_STATE;
-			}
+			// if (digitalRead(PIR_Pin) == HIGH) {
+			// 	return TO_ALERT_STATE;
+			// }
+			// if (validRFID_Read || keypad.getKey() != 'A') {
+			// 	return TO_ADMIN_STATE;
+			// }
 		}
 
 		if (password.length() == CORRECT_PASS.length()) {

@@ -45,7 +45,7 @@ inline Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 inline LiquidCrystal lcd(2, 3, 14, 15, 16, 17);
 inline MFRC522 RFID(SDA_SS_Pin, RST_Pin);  // Create MFRC522 instance
 
-inline bool motion_detected = false, lockState = true;
+inline bool motion_detected = false, lockState = true, validRFID_Read = false;
 inline char key = NO_KEY;
 inline String CORRECT_PASS = "1234";
 
@@ -57,35 +57,59 @@ inline int From_AdminState();
 
 inline void unlockSolenoid() {
 	if (lockState) {
-		digitalWrite(LOCK_Pin, LOW);
+		digitalWrite(LOCK_Pin, HIGH);
 		lockState = false;
 	}
 }
 
 inline void lockSolenoid() {
 	if (!lockState) {
-		digitalWrite(LOCK_Pin, HIGH);
+		digitalWrite(LOCK_Pin, LOW);
 		lockState = true;
 	}
 }
 
 inline bool validRFID() {
-	// Look for new cards
-	if (RFID.PICC_IsNewCardPresent() && RFID.PICC_ReadCardSerial()) {
-		// Read the card ID
-		String ReadID = "";
+	if (!RFID.PICC_IsNewCardPresent()) 
+		return false;
+	// Select one of the cards
+	if (!RFID.PICC_ReadCardSerial()) 
+		return false;
+	String content= "";
+	byte letter;
 
-		for (byte i = 0; i < RFID.uid.size; i++) {
-			ReadID += RFID.uid.uidByte[i] < 0x10 ? "0" : "";
-			ReadID += String(RFID.uid.uidByte[i], 16);
-		}
-		RFID.PICC_HaltA();
-		RFID.PCD_StopCrypto1();
-		
-		// Compare the card ID with the target ID
-		if (ReadID == CARD_UID || ReadID == TAG_UID)
-			return (true);
+	for (byte i = 0; i < RFID.uid.size; i++) {
+		 content.concat(String(RFID.uid.uidByte[i] < 0x10 ? " 0" : " "));
+		 content.concat(String(RFID.uid.uidByte[i], HEX));
 	}
-	return (false);
+	content.toUpperCase();
+
+	if (content.substring(1) == "EB 4A 92 22") { //change here the UID of card/cards or tag/tags that you want to give access
+		return true;
+	}
+	return false;
 }
 #endif
+
+
+
+
+
+
+	// // Look for new cards
+	// if (RFID.PICC_IsNewCardPresent() && RFID.PICC_ReadCardSerial()) {
+	// 	// Read the card ID
+	// 	String ReadID = "";
+
+	// 	for (byte i = 0; i < RFID.uid.size; i++) {
+	// 		ReadID += RFID.uid.uidByte[i] < 0x10 ? "0" : "";
+	// 		ReadID += String(RFID.uid.uidByte[i], 16);
+	// 	}
+	// 	RFID.PICC_HaltA();
+	// 	RFID.PCD_StopCrypto1();
+		
+	// 	// Compare the card ID with the target ID
+	// 	if (ReadID == CARD_UID || ReadID == TAG_UID)
+	// 		return (true);
+	// }
+	// return (false);
