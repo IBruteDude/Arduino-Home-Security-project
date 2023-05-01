@@ -2,10 +2,8 @@
 
 int From_AdminState()
 {
-	if (motion_detected) {
-		noTone(BUZZER_Pin);
-		motion_detected = false;
-	}
+  noTone(BUZZER_Pin);
+  motion_detected = false;
 	unlockSolenoid();
 
 	lcd.clear();

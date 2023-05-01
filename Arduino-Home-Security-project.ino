@@ -22,16 +22,16 @@ void setup()
 	RFID.PCD_Init();		// Initialise MFRC522
 
 	// Initialise the Programs state
-	Next_Program_State = TO_INPUT_STATE;
+	Next_Program_State = TO_IDLE_STATE;
 	motion_detected = false;
 	noTone(BUZZER_Pin);
 	lockSolenoid();
 }
 void loop()
 {
-//   digitalWrite(LOCK_Pin, HIGH);
+// digitalWrite(LOCK_Pin, HIGH);
 // delay(1000)  ;
-//   digitalWrite(LOCK_Pin, LOW);
+// digitalWrite(LOCK_Pin, LOW);
 // delay(1000)  ;	// switch(Next_Program_State)
 	switch (Next_Program_State)
   {

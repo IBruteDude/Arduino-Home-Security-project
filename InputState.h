@@ -2,7 +2,7 @@
 
 
 #define PASS_LEN 4
-#define idleDuration 30000
+#define idleDuration 5000
 #define Pause 3000
 
 int From_InputState()
@@ -28,9 +28,9 @@ int From_InputState()
 			// if (digitalRead(PIR_Pin) == HIGH) {
 			// 	return TO_ALERT_STATE;
 			// }
-			// if (validRFID_Read || keypad.getKey() != 'A') {
-			// 	return TO_ADMIN_STATE;
-			// }
+			if (key == 'A') {
+				return TO_ADMIN_STATE;
+			}
 		}
 
 		if (password.length() == CORRECT_PASS.length()) {
