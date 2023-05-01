@@ -56,6 +56,7 @@ int From_InputState()
 			}
 		} else {
 			password += key;
+			lcd.setCursor(password.length(), 1);
 			lcd.print('*');
 		}
 	}
