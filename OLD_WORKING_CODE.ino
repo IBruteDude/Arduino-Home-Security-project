@@ -1,7 +1,7 @@
 #include <Keypad.h>
 #include <LiquidCrystal.h>
 
-#define pirPin 12
+#define IRpin 12
 #define buzzerPin 13
 #define alarmDuration 1000
 #define retryDuration 3000
@@ -9,6 +9,9 @@
 #define COLS 4
 #define CORRECT_PASS "1234"
 #define PASS_LEN 4
+#define lockpin 14
+#define MAX_PASSWORD_ATTEMPTS 3
+int readValue;
 
 char keys[ROWS][COLS] = {
   {'1', '2', '3', 'A'},
@@ -29,56 +32,63 @@ char key = NO_KEY;
 
 void setup()
 {
-	lcd.begin(16, 2);
-	lcd.print("Bismillah");
-	pinMode(pirPin, INPUT_PULLUP);
-	pinMode(buzzerPin, OUTPUT);
+    lcd.begin(16, 2);
+    lcd.print("Bismillah");
+    pinMode(IRpin, INPUT_PULLUP);
+    pinMode(buzzerPin, OUTPUT);
+    pinMode(lockpin, OUTPUT);
 }
 void loop()
 {
-	lcd.setCursor(0, 0);
-	lcd.print("Enter Password:");
-	while (v_passcode.length() < PASS_LEN) {
-		key = NO_KEY;
-  		while (key == NO_KEY) {
-			key = keypad.getKey();
-			// pirState = digitalRead(pirPin);
-			if (pirState == HIGH)
-				break;
-    		}
-	    	v_passcode += key;
-		lcd.setCursor(v_passcode.length(), 1);
-        	lcd.print("*");
-        	if (pirState == HIGH)
-        		break;
-	}
-	if (v_passcode.length() == PASS_LEN) {
-		lcd.clear();
-		if (v_passcode == CORRECT_PASS) {
-			lcd.print("YA FARAG ALLAH");
-			wrongAttempts = 0;
-		} else {
-			lcd.print("Incorrect Pass");
-        		wrongAttempts++;
-			if (wrongAttempts >= 3) {
-        			tone(buzzerPin, 400, 1000);
-				wrongAttempts = 0;
-			} else {
-        			lcd.setCursor(0, 1);
-        			lcd.print(3 - wrongAttempts);
-        			lcd.setCursor(1, 1);
-            			lcd.print(" attempts left");
-			}
-		}
-	}
-	if (pirState == HIGH && v_passcode != CORRECT_PASS) {
-		lcd.clear();
-		lcd.print("INTRUDER");
-		tone(buzzerPin, 400);
-		delay(100);
-		noTone(buzzerPin);
-	}
-	delay(retryDuration);
-	lcd.clear();
-	v_passcode = "";
+    readValue = digitalRead(IRpin);
+    
+    lcd.setCursor(0, 0);
+    lcd.print("Enter Password:");
+    while (v_passcode.length() < PASS_LEN) {
+        key = NO_KEY;
+          while (key == NO_KEY) {
+            key = keypad.getKey();
+            if (readValue == HIGH)
+                break;
+            }
+            v_passcode += key;
+        lcd.setCursor(v_passcode.length(), 1);
+            lcd.print("*");
+            if (readValue == HIGH)
+                break;
+    }
+    if (v_passcode.length() == PASS_LEN) {
+        lcd.clear();
+        if (strcmp(v_passcode.c_str(), CORRECT_PASS) == 0) {
+            lcd.print("YOU CAN PASS");
+            digitalWrite(lockpin, HIGH);
+            delay(5000);
+            digitalWrite(lockpin, LOW);
+            wrongAttempts = 0;
+        } else {
+            lcd.print("Incorrect Pass");
+                wrongAttempts++;
+            if (wrongAttempts >= 3)
+ {                    tone(buzzerPin, 400, 1000);
+                wrongAttempts = 0;
+            } else {
+                    lcd.setCursor(0, 1);
+                    lcd.print(3 - wrongAttempts);
+                    lcd.setCursor(1, 1);
+                        lcd.print("Attempts left");
+            }
+        }
+    }
+  
+    if (readValue == LOW || v_passcode != CORRECT_PASS) {
+        lcd.clear();
+        lcd.print("INTRUDER");
+        tone(buzzerPin, 400);
+        delay(100);
+        noTone(buzzerPin);
+    }
+    delay(retryDuration);
+    lcd.clear();
+    v_passcode = "";
 }
+//IEMTIYZ
