@@ -2,8 +2,8 @@
 
 int From_AdminState()
 {
-  noTone(BUZZER_Pin);
-  motion_detected = false;
+	noTone(BUZZER_Pin);
+	motion_detected = false;
 	unlockSolenoid();
 
 	lcd.clear();
@@ -13,8 +13,13 @@ int From_AdminState()
 	while (true)
 	{
 		key = NO_KEY;
-		while(key == NO_KEY)
+		// Check for key pressed
+
+		while(key == NO_KEY) {
 			key = keypad.getKey();
+			delay(50);
+		}
+		
 		switch(key)
 		{
 		case 'A':

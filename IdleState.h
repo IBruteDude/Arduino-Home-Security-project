@@ -5,13 +5,20 @@ int From_IdleState() {
 	lockSolenoid();
 	key = NO_KEY;
 
+	// Wait in a loop until user presses Start '#'
+
 	while (key != '#') {
-		// if (digitalRead(PIR_Pin) == LOW) {
-		// 	lcd.display();
-		// 	return TO_ALERT_STATE;
-		// }
-    	key = keypad.getKey();
-    	delay(50);
+		key = keypad.getKey();
+		motion_detected = digitalRead(PIR_Pin);
+		// Check if the sensor detected motion
+
+		if (motion_detected == HIGH) {
+			lcd.display();
+			return TO_ALERT_STATE;
+		}
+		delay(50);
 	}
+	// Program started go to use input
+
 	return TO_INPUT_STATE;
 }
