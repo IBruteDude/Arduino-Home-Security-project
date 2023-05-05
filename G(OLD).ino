@@ -1,4 +1,4 @@
-#include <Keypad.h>
+ #include <Keypad.h>
 #include <LiquidCrystal.h>
 
 // Define the pin numbers for the IR sensor, the buzzer, and the lock
@@ -93,6 +93,7 @@ void loop()
         } else {
         v_passcode = "";
         }
+        int readValue = digitalRead(IRpin);
         // If the PIR sensor detects motion or the entered password is incorrect
     if (readValue == LOW || v_passcode != CORRECT_PASS) {
         // Display "INTRUDER" on the LCD screen
