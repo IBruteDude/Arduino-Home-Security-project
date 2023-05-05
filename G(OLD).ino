@@ -50,8 +50,6 @@ void setup()
 
 void loop()
 {
-    // Read the IR sensor value
-    int readValue = digitalRead(IRpin);
     
     // Prompt the user to enter the password and read the input from the keypad
     lcd.setCursor(0, 0);
@@ -62,8 +60,11 @@ void loop()
 
         // Wait for a key press
         while (key == NO_KEY) {
-            key = keypad.getKey();
-            
+            key = keypad.getKey()
+
+            // Read the IR sensor value
+            int readValue = digitalRead(IRpin);
+    
             // If the PIR sensor is triggered, clear the entered password
             if (readValue == HIGH) {
                 v_passcode = "";
@@ -90,7 +91,6 @@ void loop()
             digitalWrite(lockpin, LOW);
             wrongAttempts = 0;
         } else {
-            // If the password is incorrect, increment the wrongAttempts counter and show a
         v_passcode = "";
         }
         // If the PIR sensor detects motion or the entered password is incorrect
