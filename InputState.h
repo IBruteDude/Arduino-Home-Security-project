@@ -1,14 +1,16 @@
 #include "StateFunctions.h"
 
 
-#define PASS_LEN 4
-#define idleDuration 5000
-#define Pause 3000
+#define PASS_LEN 		4
+#define idleDuration 	30000
+#define Pause 	3000
+#define CLICK_FREQ		1400
+#define WRONG_FREQ		1000
 
 int From_InputState()
 {
 	unsigned long startingTime = millis();
-	String password;
+
 	int wrongAttempts = 0;
 
 	lcd.display();
@@ -16,22 +18,23 @@ int From_InputState()
 	lcd.print("Enter Password:");
 	while (true)
 	{
-    lcd.clear();
-	  lcd.print("Enter Password:");
 		// The main waiting loop
 		key = NO_KEY;
-    while (key == NO_KEY) {
+		while (key == NO_KEY) {
 			key = keypad.getKey();
-      validRFID_Read = validRFID();
+			validRFID_Read = validRFID();
 			if (millis() - startingTime > idleDuration)
 				return TO_IDLE_STATE;
-			// if (digitalRead(PIR_Pin) == HIGH) {
-			// 	return TO_ALERT_STATE;
-			// }
-			if (key == 'A') {
+				// if (digitalRead(PIR_Pin) == HIGH) {
+				// 	return TO_ALERT_STATE;
+				// }
+			if (validRFID_Read) {
 				return TO_ADMIN_STATE;
 			}
+			delay(50);
 		}
+
+		password += key;
 
 		if (password.length() == CORRECT_PASS.length()) {
 			lcd.clear();
@@ -53,14 +56,16 @@ int From_InputState()
 					lcd.print(3 - wrongAttempts);
 					lcd.setCursor(1, 1);
 					lcd.print(" attempts left");
+					tone(BUZZER_Pin, WRONG_FREQ , 500);
 					delay(Pause);
 					lcd.clear();
+					lcd.print("Enter Password:");
 					password = "";
 				}
 			}
 		} else {
-			password += key;
-			lcd.setCursor(password.length(), 1);
+			tone(BUZZER_Pin, CLICK_FREQ, 150);
+			lcd.setCursor(password.length() - 1, 1);
 			lcd.print('*');
 		}
 	}

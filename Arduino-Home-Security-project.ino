@@ -21,20 +21,26 @@ void setup()
 	SPI.begin();			// Initialise SPI bus
 	RFID.PCD_Init();		// Initialise MFRC522
 
-	// Initialise the Programs state
+	// Initialise the Program's state
 	Next_Program_State = TO_IDLE_STATE;
 	motion_detected = false;
-	noTone(BUZZER_Pin);
+	// noTone(BUZZER_Pin);
 	lockSolenoid();
 }
+
+int freq = 0;
+
 void loop()
 {
-// digitalWrite(LOCK_Pin, HIGH);
-// delay(1000)  ;
-// digitalWrite(LOCK_Pin, LOW);
-// delay(1000)  ;	// switch(Next_Program_State)
+	/**/
+  delay(5000);
+  lcd.clear();
+	lcd.print((freq + 100) % 3000);
+	freq += 100;
+  tone(BUZZER_Pin, freq % 3000, 2000);
+	/** /
 	switch (Next_Program_State)
-  {
+	{
 	case TO_IDLE_STATE:
 		Next_Program_State = From_IdleState();
 		break;
@@ -51,4 +57,5 @@ void loop()
 		Next_Program_State = From_AdminState();
 		break;
 	}
+	/**/
 }
