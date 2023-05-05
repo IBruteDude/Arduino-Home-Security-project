@@ -60,7 +60,7 @@ void loop()
 
         // Wait for a key press
         while (key == NO_KEY) {
-            key = keypad.getKey()
+            key = keypad.getKey();
 
             // Read the IR sensor value
             int readValue = digitalRead(IRpin);
