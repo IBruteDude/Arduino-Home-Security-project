@@ -2,9 +2,12 @@
 
 int From_UnlockState()
 {
+	// Initialize variables and LCD monitor
+
 	unlockSolenoid();
 	lcd.clear();
 	lcd.print("Unlocked");
+
 	// Wait until Exit key is pressed
 
 	while(key != '*') {

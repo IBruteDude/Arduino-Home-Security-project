@@ -5,12 +5,15 @@
 
 int From_AlertState()
 {
+	// Initialize variables and LCD monitor
+
+	lcd.display();
 	lcd.clear();
 	lcd.print("Access Denied");
 	tone(BUZZER_Pin, ALARM_FREQ);
 	validRFID_Read = false;
 
-	if (motion_detected == true) {
+	if (motion_detected == HIGH) {
 		lcd.setCursor(0, 1);
 		lcd.print("INTRUDER");
 	}

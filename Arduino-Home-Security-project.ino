@@ -11,26 +11,22 @@ int Next_Program_State;
 
 void setup()
 {
-	// Initialise arduino pin modes
+	// Initialize arduino pin modes
 
 	pinMode(PIR_Pin, INPUT);
 	pinMode(BUZZER_Pin, OUTPUT);
 	pinMode(LOCK_Pin, OUTPUT);
 
-	lcd.begin(16, 2);		// Initialise LCD rows & columns
+	lcd.begin(16, 2);		// Initialize LCD rows & columns
 	lcd.print("Bismillah"); // بنسمي الله
-	SPI.begin();			// Initialise SPI bus
-	RFID.PCD_Init();		// Initialise MFRC522
+	SPI.begin();			// Initialize SPI bus
+	RFID.PCD_Init();		// Initialize RFID device
 
-	// Initialise the Program's state
+	// Initialize the Program's state
 
 	Next_Program_State = TO_IDLE_STATE;
-	motion_detected = false;
-	noTone(BUZZER_Pin);
 	lockSolenoid();
 }
-
-int freq = 0;
 
 void loop()
 {

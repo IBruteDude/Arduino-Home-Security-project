@@ -1,6 +1,9 @@
 #include "StateFunctions.h"
 
-int From_IdleState() {
+int From_IdleState()
+{
+	// Initialize variables and LCD monitor
+
 	lcd.noDisplay();
 	lockSolenoid();
 	key = NO_KEY;
@@ -12,10 +15,8 @@ int From_IdleState() {
 		motion_detected = digitalRead(PIR_Pin);
 		// Check if the sensor detected motion
 
-		if (motion_detected == HIGH) {
-			lcd.display();
+		if (motion_detected == HIGH)
 			return TO_ALERT_STATE;
-		}
 		delay(50);
 	}
 	// Program started go to use input

@@ -9,28 +9,31 @@
 
 int From_InputState()
 {
+	// Initialize variables and LCD monitor
+
 	wrongAttempts = 0;
-	password = "";
 	lcd.display();
-	lcd.blink();
+
 	lcd.clear();
 	lcd.print("Enter Password:");
+	lcd.setCursor(0, 1);
+	lcd.blink();
+	password = "";
 
 	while (true)
 	{
 		key = NO_KEY;
 		startingTime = millis();
 		// Wait in a loop until user presses a key
-		
+
 		while (key == NO_KEY) {
 			key = keypad.getKey();
 			validRFID_Read = validRFID();
 			motion_detected = digitalRead(PIR_Pin);
 			// Check for a valid RFID
 			
-			if (validRFID_Read) {
+			if (validRFID_Read)
 				return TO_ADMIN_STATE;
-			}
 			// Check if idle duration is exceeded
 			
 			if (millis() - startingTime > idleDuration)
@@ -50,14 +53,15 @@ int From_InputState()
 		lcd.print('*');
 
 		if (password.length() == CORRECT_PASS.length()) {
+			lcd.noBlink();
 			lcd.clear();
 			if (password == CORRECT_PASS) {
 				// Set to unlocked state
-				
+
 				lcd.print("Correct Pass");
 				delay(Pause);
 				return TO_UNLOCK_STATE;
-			} else if (wrongAttempts < 3) {
+			} else if (wrongAttempts < 2) {
 				// Warn the user and retry
 
 				lcd.print("Incorrect Pass");
@@ -68,8 +72,11 @@ int From_InputState()
 				lcd.print(" attempts left");
 				tone(BUZZER_Pin, WRONG_FREQ , 500);
 				delay(Pause);
+
 				lcd.clear();
 				lcd.print("Enter Password:");
+				lcd.setCursor(0, 1);
+				lcd.blink();
 				password = "";
 			} else {
 				// Wrong password set the alarm
