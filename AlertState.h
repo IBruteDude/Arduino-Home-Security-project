@@ -1,8 +1,5 @@
 #include "StateFunctions.h"
 
-#define ALARM_FREQ		1000
-#define alarmDuration	1000
-
 int From_AlertState()
 {
 	// Initialize variables and LCD monitor
@@ -10,7 +7,7 @@ int From_AlertState()
 	lcd.display();
 	lcd.clear();
 	lcd.print("Access Denied");
-	tone(BUZZER_Pin, ALARM_FREQ);
+	tone(BUZZER_Pin, BAD_FREQ);
 	validRFID_Read = false;
 
 	if (motion_detected == HIGH) {

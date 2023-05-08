@@ -23,6 +23,9 @@
 #define CARD_UID		"EB 4A 92 22"
 #define TAG_UID 		"2A 1B 6F 81"
 
+#define GOOD_FREQ		1400
+#define BAD_FREQ		1000
+
 enum StatesTransition
 {
 	TO_IDLE_STATE,

@@ -1,11 +1,7 @@
 #include "StateFunctions.h"
 
-
-#define PASS_LEN 		4
 #define idleDuration 	30000
 #define Pause 			3000
-#define CLICK_FREQ		1400
-#define WRONG_FREQ		1000
 
 int From_InputState()
 {
@@ -48,7 +44,7 @@ int From_InputState()
 		// Key pressed and recorded
 		
 		password += key;
-		tone(BUZZER_Pin, CLICK_FREQ, 150);
+		tone(BUZZER_Pin, GOOD_FREQ, 150);
 		lcd.setCursor(password.length() - 1, 1);
 		lcd.print('*');
 
@@ -70,7 +66,7 @@ int From_InputState()
 				lcd.print(3 - wrongAttempts);
 				lcd.setCursor(1, 1);
 				lcd.print(" attempts left");
-				tone(BUZZER_Pin, WRONG_FREQ , 500);
+				tone(BUZZER_Pin, BAD_FREQ , 500);
 				delay(Pause);
 
 				lcd.clear();

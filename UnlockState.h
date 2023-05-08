@@ -4,6 +4,7 @@ int From_UnlockState()
 {
 	// Initialize variables and LCD monitor
 
+	tone(BUZZER_Pin, GOOD_FREQ, 400);
 	unlockSolenoid();
 	lcd.clear();
 	lcd.print("Unlocked");
