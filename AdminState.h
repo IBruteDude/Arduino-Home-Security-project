@@ -7,7 +7,6 @@ int From_AdminState()
 
 	noTone(BUZZER_Pin);
 	motion_detected = false;
-	unlockSolenoid();
 
 	tone(BUZZER_Pin, GOOD_FREQ, promptDuration);
 	printNew("ADMIN: options", " -A -B -C '*'");

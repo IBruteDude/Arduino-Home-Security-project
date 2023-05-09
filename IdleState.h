@@ -5,7 +5,7 @@ int From_IdleState()
 	// Initialize variables and LCD monitor
 
 	lcd.noDisplay();
-  lockSolenoid();
+	lockSolenoid();
 	key = NO_KEY;
 
 	// Wait in a loop until user presses Start '#'

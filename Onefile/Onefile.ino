@@ -78,7 +78,7 @@ void setup()
 {
 	// Initialize arduino pin modes
 
-	pinMode(PIR_Pin, INPUT);
+	pinMode(PIR_Pin, INPUT_PULLUP);
 	pinMode(BUZZER_Pin, OUTPUT);
 	pinMode(LOCK_Pin, OUTPUT);
 
@@ -90,12 +90,10 @@ void setup()
 	// Initialize the Program's state
 
 	Next_Program_State = TO_IDLE_STATE;
-	lockSolenoid();
 }
 
 void loop()
 {
-	// 
 	switch (Next_Program_State)
 	{
 	case TO_IDLE_STATE:
@@ -120,15 +118,17 @@ void loop()
 
 
 
-void unlockSolenoid() {
-	if (lockState) {
-		digitalWrite(LOCK_Pin, HIGH);
+inline void unlockSolenoid() {
+	// if (lockState)
+	{
+		digitalWrite(LOCK_Pin, LOW);
 		lockState = false;
 	}
 }
-void lockSolenoid() {
-	if (!lockState) {
-		digitalWrite(LOCK_Pin, LOW);
+inline void lockSolenoid() {
+	// if (!lockState)
+	{
+		digitalWrite(LOCK_Pin, HIGH);
 		lockState = true;
 	}
 }
@@ -172,7 +172,7 @@ int From_IdleState()
 		key = keypad.getKey();
 		motion_detected = digitalRead(PIR_Pin);
 		// Check if the sensor detected motion
-		if (motion_detected == HIGH)
+		if (motion_detected == LOW) // LOW indicates detection
 			return TO_ALERT_STATE;
 		delay(50);
 	}
@@ -206,7 +206,7 @@ int From_InputState()
 			if (millis() - startingTime > idleDuration)
 				return TO_IDLE_STATE;
 			// Check if the sensor detected motion
-			if (motion_detected == HIGH)
+			if (motion_detected == LOW) // LOW indicates detection
 				return TO_ALERT_STATE;
 			delay(50);
 		}

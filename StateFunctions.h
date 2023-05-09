@@ -83,18 +83,12 @@ inline int From_AdminState();
  * Useful action functions
  */
 inline void unlockSolenoid() {
-	// if (lockState)
-  {
 		digitalWrite(LOCK_Pin, LOW);
 		lockState = false;
-	}
 }
 inline void lockSolenoid() {
-	// if (!lockState)
-  {
 		digitalWrite(LOCK_Pin, HIGH);
 		lockState = true;
-	}
 }
 inline String& get_RFID_UID() {
 	UID = "";
