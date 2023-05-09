@@ -5,13 +5,13 @@ int From_UnlockState()
 	// Initialize variables and LCD monitor
 
 	tone(BUZZER_Pin, GOOD_FREQ, 400);
-	unlockSolenoid();
-	lcd.clear();
-	lcd.print("Unlocked");
 
+  unlockSolenoid();
+	printNew("Unlocked", "Open for 5 sec");
 	// Wait until Exit key is pressed
 
-	while(key != '*') {
+	startingTime = millis();
+	while(key != '*' && (millis() - startingTime < 5000)) {
 		key = keypad.getKey();
 		delay(50);
 	}

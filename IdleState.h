@@ -5,7 +5,7 @@ int From_IdleState()
 	// Initialize variables and LCD monitor
 
 	lcd.noDisplay();
-	lockSolenoid();
+  lockSolenoid();
 	key = NO_KEY;
 
 	// Wait in a loop until user presses Start '#'
@@ -15,7 +15,7 @@ int From_IdleState()
 		motion_detected = digitalRead(PIR_Pin);
 		// Check if the sensor detected motion
 
-		if (motion_detected == HIGH)
+		if (Motion_detection == true && motion_detected == LOW)
 			return TO_ALERT_STATE;
 		delay(50);
 	}

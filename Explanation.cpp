@@ -1,4 +1,4 @@
--------------required basics-------------
+/*-------------required basics-------------
 
 
 variable declaration:
@@ -71,3 +71,4 @@ noTone(pin)
 keypad.getKey()
 digitalRead(pin)	// != cin >> pin
 digitalWrite(pin, value)
+*/

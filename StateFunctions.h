@@ -20,11 +20,16 @@
 #define SDA_SS_Pin		53
 #define RST_Pin			49
 
-#define CARD_UID		"EB 4A 92 22"
-#define TAG_UID 		"2A 1B 6F 81"
+#define CARD_UID		" EB 4A 92 22"
+#define TAG_UID 		" 2A 1B 6F 81"
 
 #define GOOD_FREQ		1400
 #define BAD_FREQ		1000
+
+#define idleDuration 	30000
+#define Pause 			3000
+#define promptDuration	400
+#define clickDuration	150
 
 enum StatesTransition
 {
@@ -56,12 +61,12 @@ inline MFRC522 RFID(SDA_SS_Pin, RST_Pin);  // Create MFRC522 instance
 /**
  * Local variables used inside functions
  */
-inline bool motion_detected = false, lockState = true, validRFID_Read = false;
+inline bool Motion_detection = true, motion_detected = false, lockState = true, validRFID_Read = false;
 inline char key = NO_KEY;
 inline String CORRECT_PASS = "1234", password;
-inline String UID;
+inline String VALID_UID = CARD_UID, UID;
 inline unsigned long startingTime;
-inline int i, wrongAttempts;
+inline int i, wrongAttempts, passlength = 4;
 
 
 /**
@@ -78,39 +83,40 @@ inline int From_AdminState();
  * Useful action functions
  */
 inline void unlockSolenoid() {
-	if (lockState) {
-		digitalWrite(LOCK_Pin, HIGH);
+	// if (lockState)
+  {
+		digitalWrite(LOCK_Pin, LOW);
 		lockState = false;
 	}
 }
 inline void lockSolenoid() {
-	if (!lockState) {
-		digitalWrite(LOCK_Pin, LOW);
+	// if (!lockState)
+  {
+		digitalWrite(LOCK_Pin, HIGH);
 		lockState = true;
 	}
 }
-inline bool validRFID() {
+inline String& get_RFID_UID() {
+	UID = "";
 	// Check if a card is detected
 	
-	if (!RFID.PICC_IsNewCardPresent()) 
-		return false;
-	if (!RFID.PICC_ReadCardSerial()) 
-		return false;
-	UID = "";
+	if (RFID.PICC_IsNewCardPresent() && RFID.PICC_ReadCardSerial()) {
+		// Read the card UID
 
-	// Read the card UID
+		for (i = 0; i < RFID.uid.size; i++) {
+			UID.concat(String(RFID.uid.uidByte[i] < 0x10 ? " 0" : " "));
+			UID.concat(String(RFID.uid.uidByte[i], HEX));
+		}
+		UID.toUpperCase();
+	}	
+	return UID;
+}
 
-	for (i = 0; i < RFID.uid.size; i++) {
-		 UID.concat(String(RFID.uid.uidByte[i] < 0x10 ? " 0" : " "));
-		 UID.concat(String(RFID.uid.uidByte[i], HEX));
-	}
-	UID.toUpperCase();
-
-	// Check for UID you want to give access 
-	
-	if (UID.substring(1) == CARD_UID) {
-		return true;
-	}
-	return false;
+inline void printNew(const String& line1, const String& line2) {
+	lcd.clear();
+	lcd.print(line1);
+	lcd.setCursor(0, 1);
+	if (line2 != "")
+		lcd.print(line2);
 }
 #endif

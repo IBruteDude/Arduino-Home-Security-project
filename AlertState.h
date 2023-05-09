@@ -18,7 +18,7 @@ int From_AlertState()
 	// Wait until valid RFID is detected
 
 	while (!validRFID_Read) {
-		validRFID_Read = validRFID();
+		validRFID_Read = (get_RFID_UID() == VALID_UID);
 		key = keypad.getKey();
 		delay(50);
 	}

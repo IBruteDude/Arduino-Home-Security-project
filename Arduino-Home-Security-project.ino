@@ -13,7 +13,7 @@ void setup()
 {
 	// Initialize arduino pin modes
 
-	pinMode(PIR_Pin, INPUT);
+	pinMode(PIR_Pin, INPUT_PULLUP);
 	pinMode(BUZZER_Pin, OUTPUT);
 	pinMode(LOCK_Pin, OUTPUT);
 
@@ -25,11 +25,10 @@ void setup()
 	// Initialize the Program's state
 
 	Next_Program_State = TO_IDLE_STATE;
-	lockSolenoid();
 }
 
 void loop()
-{
+{ /**/
 	switch (Next_Program_State)
 	{
 	case TO_IDLE_STATE:
@@ -48,4 +47,10 @@ void loop()
 		Next_Program_State = From_AdminState();
 		break;
 	}
+  /** /
+    digitalWrite(LOCK_Pin,LOW); // RELAY ON   
+  delay(1000);   
+  digitalWrite(LOCK_Pin,HIGH); // RELAY OFF   
+  delay(1000); 
+  /**/  
 }

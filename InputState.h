@@ -1,7 +1,5 @@
 #include "StateFunctions.h"
 
-#define idleDuration 	30000
-#define Pause 			3000
 
 int From_InputState()
 {
@@ -9,10 +7,8 @@ int From_InputState()
 
 	wrongAttempts = 0;
 	lcd.display();
-
-	lcd.clear();
-	lcd.print("Enter Password:");
-	lcd.setCursor(0, 1);
+	tone(BUZZER_Pin, GOOD_FREQ, promptDuration);
+	printNew("Enter Password:", "");
 	lcd.blink();
 	password = "";
 
@@ -24,7 +20,7 @@ int From_InputState()
 
 		while (key == NO_KEY) {
 			key = keypad.getKey();
-			validRFID_Read = validRFID();
+			validRFID_Read = (get_RFID_UID() == VALID_UID);
 			motion_detected = digitalRead(PIR_Pin);
 			// Check for a valid RFID
 			
@@ -36,7 +32,7 @@ int From_InputState()
 				return TO_IDLE_STATE;
 			// Check if the sensor detected motion
 
-			if (motion_detected == HIGH)
+			if (Motion_detection == true && motion_detected == LOW)
 				return TO_ALERT_STATE;
 			delay(50);
 		}
@@ -44,39 +40,30 @@ int From_InputState()
 		// Key pressed and recorded
 		
 		password += key;
-		tone(BUZZER_Pin, GOOD_FREQ, 150);
-		lcd.setCursor(password.length() - 1, 1);
+		tone(BUZZER_Pin, GOOD_FREQ, clickDuration);
 		lcd.print('*');
 
 		if (password.length() == CORRECT_PASS.length()) {
-			lcd.noBlink();
-			lcd.clear();
 			if (password == CORRECT_PASS) {
 				// Set to unlocked state
 
-				lcd.print("Correct Pass");
+				lcd.noBlink();
+				printNew("Correct Pass", "");
 				delay(Pause);
 				return TO_UNLOCK_STATE;
 			} else if (wrongAttempts < 2) {
 				// Warn the user and retry
 
-				lcd.print("Incorrect Pass");
 				wrongAttempts++;
-				lcd.setCursor(0, 1);
-				lcd.print(3 - wrongAttempts);
-				lcd.setCursor(1, 1);
-				lcd.print(" attempts left");
-				tone(BUZZER_Pin, BAD_FREQ , 500);
+				tone(BUZZER_Pin, BAD_FREQ , promptDuration);
+				printNew("Incorrect Pass", String(3 - wrongAttempts) + String(" attempts left"));
 				delay(Pause);
-
-				lcd.clear();
-				lcd.print("Enter Password:");
-				lcd.setCursor(0, 1);
-				lcd.blink();
+				printNew("Enter Password:", "");
 				password = "";
 			} else {
-				// Wrong password set the alarm
+				// Set to alert state
 				
+				lcd.noBlink();
 				return TO_ALERT_STATE;
 			}
 		}
